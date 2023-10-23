@@ -30,22 +30,27 @@ def go(args):
     df = df[df.price.between(args.min_price, args.max_price)]
     logger.info("Cleaned data")
 
-    # 4. Upload artifact
+    # 4. Save cleaned data
+    logger.info("Saving cleaned data")
+    df.to_csv(args.output_artifact, index=False)
+    logger.info("Saved cleaned data")
+
+    # 5. Upload artifact
     logger.info("Uploading artifact")
     artifact = wandb.Artifact(
         args.output_artifact,
         type=args.output_type,
         description=args.output_description,
     )
+    artifact.add_file(args.output_artifact)
     logger.info("Uploaded artifact")
 
-    # 5. Log output artifact
+    # 6. Log output artifact
     logger.info("Logging artifact")
-    artifact.add_file(artifact_local_path)
     run.log_artifact(artifact)
     logger.info("Logged artifact")
 
-    # 6. Finish run
+    # 7. Finish run
     logger.info("Finishing run")
     run.finish()
     logger.info("Finished run")
