@@ -32,9 +32,6 @@ def go(config: DictConfig):
     steps_par = config['main']['steps']
     active_steps = steps_par.split(",") if steps_par != "all" else _steps
 
-    print(f"max tfidf features: {config['modeling']['max_tfidf_features']}")
-    print(f"max features: {config['modeling']['random_forest']['max_features']}")
-
     # Move to a temporary directory
     with tempfile.TemporaryDirectory() as tmp_dir:
 
@@ -114,8 +111,6 @@ def go(config: DictConfig):
                 "output_artifact": "random_forest_export",
                 },
             )
-
-            pass
 
         if "test_regression_model" in active_steps:
             _ = mlflow.run(
