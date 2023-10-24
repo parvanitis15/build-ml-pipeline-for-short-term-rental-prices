@@ -30,6 +30,10 @@ def go(args):
     df = df[df.price.between(args.min_price, args.max_price)]
     logger.info("Cleaned data")
 
+    # Fix: Discard data outside of NYC
+    idx = df['longitude'].between(-74.25, -73.50) & df['latitude'].between(40.5, 41.2)
+    df = df[idx].copy()
+
     # 4. Save cleaned data
     logger.info("Saving cleaned data")
     df.to_csv(args.output_artifact, index=False)
